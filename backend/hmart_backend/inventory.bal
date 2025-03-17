@@ -21,7 +21,7 @@ service /inventory on inventoryListener {
         return stock;
     }
 
-    resource function post reservation(@http:Payload ProductOrder porder) returns json {
+    resource function post reservations(@http:Payload ProductOrder porder) returns json {
         if !self.stocks.hasKey(porder.product) {
             io:println("Ordered: ", porder);
             return {orderId: porder.'order, status: "ordered"};

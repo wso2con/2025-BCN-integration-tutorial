@@ -17,6 +17,12 @@ type ProductOrder record {|
     int amount;
 |};
 
+type InvoiceRequest record {|
+    string customerId;
+    string productId;
+    int quantity;
+|};
+
 type Supplier record {|
     string supplierId;
     int staff;
