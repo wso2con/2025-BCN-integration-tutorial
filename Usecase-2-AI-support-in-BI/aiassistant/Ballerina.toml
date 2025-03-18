@@ -1,0 +1,4 @@
+[package]
+org = "anupama"
+name = "aiassistant"
+version = "0.1.0"
