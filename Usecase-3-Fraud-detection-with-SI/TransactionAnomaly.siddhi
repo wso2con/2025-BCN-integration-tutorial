@@ -1,0 +1,33 @@
+@App:name("TransactionAnomaly")
+
+@source(type = 'cdc',
+    url = 'jdbc:mysql://localhost:3306/bank?useSSL=false',
+    mode = 'polling',
+    jdbc.driver.name = 'com.mysql.jdbc.Driver',
+    polling.column = 'last_update',
+    polling.interval = '1',
+    table.name = 'TransactionTable', @map(type = 'keyvalue')) 
+define stream TransactionStream(customer string, amount double);
+
+@sink(type='email', @map(type='text') ,
+    subject='Suspicious Transaction Detected-{{customer}}', 
+    port = '465',
+    host = 'smtp.gmail.com',
+    ssl.enable = 'true',
+    auth = 'true')
+define stream AnomalyAlertStream(customer string, total double, currentTime string, totalCount long);
+
+@sink(type='log')
+define stream EmailLogStream(customer string, total double, currentTime string, totalCount long);
+
+from TransactionStream#window.time(10 sec)
+select customer, 
+    sum(amount) as total,
+    time:currentTimestamp() as currentTime,
+    count() as totalCount
+group by customer
+having total > 100000 and totalCount > 1
+insert into AnomalyAlertStream;
+
+from AnomalyAlertStream
+insert into EmailLogStream;

@@ -1,8 +1,11 @@
 # Siddhi Transaction Anomaly Detection Application
 
+![alt text](image.png)
+
 ## Overview
 
-This Siddhi application demonstrates anomaly detection using **Streaming Integrator**. It sends an email notification to an administrator when more than one transaction occurs within 10 seconds for a specific user, and the total amount of those transactions exceeds 100,000.
+This Siddhi application demonstrates anomaly detection using [WSO2 Streaming Integrator](https://wso2.com/streaming-integrator/). 
+It sends an email notification to an administrator when more than one transaction occurs within 10 seconds for a specific user, and the total amount of those transactions exceeds 100,000.
 
 ## Key Advantages of Siddhi and Streaming Integrator
 
@@ -14,9 +17,9 @@ This Siddhi application demonstrates anomaly detection using **Streaming Integra
 
 ## Prerequisites
 
-- **MySQL Database**: The application uses a MySQL database to store transaction records.
-- **Streaming Integrator Tooling**: To run the Siddhi application, you need to set up the Streaming Integrator Tooling.
-- **Java**: Ensure that you have Java installed.
+- MySQL Database: The application uses a MySQL database to store transaction records.
+- Streaming Integrator and Streaming Integrator Tooling: To develop and run the streaming application
+- Java: Ensure that you have Java installed.
 
 ## Setup Instructions
 
@@ -31,8 +34,26 @@ Run the database commands from the provided `db.sql` file to create the required
 
 ### 3. Update the Configuration
 
-- Open the `deployment.yaml` file located in the `conf/server` directory.
-- Append the content from the `deployment.yaml` file in this repository to the existing file.
+- Append the below content to the `deployment.yaml` file located in the `conf/server` directory.
+
+```
+siddhi:
+  extensions:
+    - extension:
+        name: email
+        namespace: sink
+        properties:
+          password: *****
+          username: username
+          address: sender@gmail.com
+          to: receiver@gmail.com
+    - extension:
+        name: cdc
+        namespace: source
+        properties:
+          username: username
+          password: password
+```
 - Replace the variables in the `deployment.yaml` file with appropriate values (e.g., MySQL database credentials, email credentials).
 
 For **Gmail password generation**: Follow the instructions here:  
