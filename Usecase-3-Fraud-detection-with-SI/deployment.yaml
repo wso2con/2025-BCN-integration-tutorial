@@ -1,0 +1,16 @@
+siddhi:
+  extensions:
+    - extension:
+        name: email
+        namespace: sink
+        properties:
+          password: *****
+          username: username
+          address: sender@gmail.com
+          to: receiver@gmail.com
+    - extension:
+        name: cdc
+        namespace: source
+        properties:
+          username: username
+          password: password
